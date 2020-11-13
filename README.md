@@ -18,10 +18,6 @@ After installing all the system requirements it's necessary to install the proje
 command under project directory (low_level_challenge):
 
 ```commandline
-make install
-```
-or
-```commandline
 poetry install
 ```
 
@@ -39,21 +35,13 @@ poetry run python . --help
 And the script itself can be run using:
 
 ```commandline
-make run
-```
-or
-```commandline
-poetry run python . run <input_file> <source_node>
+poetry run python . run <output_path> -d <input_dataset_1> -d <input_dataset_2>
 ```
 
 ### Tests
 
 The tests can be executed by:
 
-```commandline
-make test
-```
-or
 ```commandline
 poetry run pytest
 ```
