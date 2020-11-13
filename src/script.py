@@ -2,7 +2,7 @@ import typing
 
 from src.processor import CustomProcessor
 
-if typing.TYPE_CHECKING:
+if typing.TYPE_CHECKING:  # noqa
     import os
 
 

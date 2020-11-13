@@ -1,9 +1,7 @@
+import os
 import typing
 
 import pandas as pd
-
-if typing.TYPE_CHECKING:
-    import os
 
 
 class LazyLoadDatasetsMixin:
@@ -22,8 +20,7 @@ class LazyLoadDatasetsMixin:
     )  # type: typing.Dict[str, typing.Union[os.PathLike, typing.Tuple[os.PathLike, typing.Callable]]]
 
     def _load_datasets(
-        self,
-        datasets_paths: typing.Dict[str, typing.Union["os.PathLike", typing.Tuple["os.PathLike", typing.Callable]]],
+        self, datasets_paths: typing.Dict[str, typing.Union[os.PathLike, typing.Tuple[os.PathLike, typing.Callable]]],
     ) -> typing.Dict[str, pd.DataFrame]:
         paths = {
             name: (path[0], path[1])
@@ -54,7 +51,7 @@ class DumpDatasetsMixin:
 
     _datasets_default_dump_format = "parquet"
 
-    def dump_datasets(self, path: "os.PathLike" = None, dump_format: str = None) -> None:
+    def dump_datasets(self, path: os.PathLike = None, dump_format: str = None) -> None:
         """
         Dump all datasets into files under give path and using specified format.
 
@@ -71,6 +68,6 @@ class DumpDatasetsMixin:
 
         try:
             for name, dataset in self.datasets.items():
-                getattr(dataset, f"to_{dump_format}")(os.path.join(path, name))
+                getattr(dataset, f"to_{dump_format}")(os.path.join(path, f"{name}.{dump_format}"))
         except AttributeError:
             raise ValueError(f"'{dump_format}' is not a valid dump format")

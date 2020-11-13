@@ -4,7 +4,7 @@ import pandas as pd
 
 from src.datasets import LazyLoadDatasetsMixin, DumpDatasetsMixin
 
-if typing.TYPE_CHECKING:
+if typing.TYPE_CHECKING:  # noqa
     import os
 
 
@@ -34,16 +34,16 @@ class CustomProcessor(LazyLoadDatasetsMixin, DumpDatasetsMixin):
         dataset2.fillna(0, inplace=True)
         return dataset1, dataset2
 
-    def _add_total_column(self, dataset: pd.DataFrame) -> pd.DataFrame:
+    def _add_feature_column(self, dataset: pd.DataFrame) -> pd.DataFrame:
         """
-        Calculate the sum of first and second columns and add it as a new 'total' column.
+        Calculate the sum of column 'A' and column 'B' and add it as a new 'feature' column.
 
         :param dataset: input dataset.
         :type dataset: pd.DataFrame
         :return: modified dataset.
         :rtype: pd.DataFrame
         """
-        dataset["total"] = dataset[0] + dataset[1]
+        dataset["feature"] = dataset["A"] + dataset["B"]
         return dataset
 
     def calculate(self) -> typing.Tuple[pd.DataFrame, pd.DataFrame]:
@@ -69,18 +69,10 @@ class CustomProcessor(LazyLoadDatasetsMixin, DumpDatasetsMixin):
         dataset1, dataset2 = self._preprocess(dataset1, dataset2)
 
         # Make all the transformations
-        dataset1 = self._add_total_column(dataset1)
+        dataset1 = self._add_feature_column(dataset1)
 
         # Replace datasets with modified
         self.datasets["dataset1"] = dataset1
         self.datasets["dataset2"] = dataset2
 
         return dataset1, dataset2
-
-
-if __name__ == "__main__":
-    main = CustomProcessor(
-        {"complete_by_credit_rci": "data/complete_by_credit_rci.h5", "inq_dates_rci": "data/inq_dates_rci.h5"}
-    )
-
-    main.calculate()
